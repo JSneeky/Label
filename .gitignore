@@ -1,3 +1,5 @@
+*.Identifier
+Makefile*
 *.txt
 *.html
 
