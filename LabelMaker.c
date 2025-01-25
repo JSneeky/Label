@@ -102,10 +102,18 @@ void indexHTML(FILE *index, char htmlFile[], char productName[]) {
     fprintf(index, "<li><a href=\"./%s\">%s</a></li>", htmlFile, productName);
 }
 
+void newName(char productName[], int length) {
+    for (int i = 0; i < length; i++) {
+        if (productName[i] == '_') productName[i] = ' ';
+        else;
+    }
+}
+
 //Writes the HTML file for a given row of the database
 void writeHTML(char productName[], char price[], char ing1[], char ing2[], char ing3[], char ing4[], char ing5[], char barcode[], FILE *index) {
     int length = strlen(productName);
     char htmlFile[length + 10];
+    newName(productName, length);
     for (int i = 0; i < length; i++) {
         if (productName[i] != ',') {
             htmlFile[i] = productName[i];
@@ -123,7 +131,6 @@ void writeHTML(char productName[], char price[], char ing1[], char ing2[], char 
     //printf("%s %s", productName, htmlFile);
     productHTML(htmlFile, productName, price, ing1, ing2, ing3, ing4, ing5, barcode);
     indexHTML(index, htmlFile, productName);
-
 }
 
 //Closes open tags in index.html
