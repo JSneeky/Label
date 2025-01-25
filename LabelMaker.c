@@ -97,6 +97,7 @@ void productHTML(char htmlFile[], char productName[], char price[], char ing1[],
     fclose(product);
 }
 
+//Adds product to index.html file
 void indexHTML(FILE *index, char htmlFile[], char productName[]) {
     fprintf(index, "<li><a href=\"./%s\">%s</a></li>", htmlFile, productName);
 }
@@ -125,6 +126,7 @@ void writeHTML(char productName[], char price[], char ing1[], char ing2[], char 
 
 }
 
+//Closes open tags in index.html
 void indexEnd(FILE *index) {
     fprintf(index, "</ul></Body></html>");
 }
@@ -139,10 +141,13 @@ void seperate(FILE *in, FILE *index) {
         writeHTML(productName, price, ing[0], ing[1], ing[2], ing[3], ing[4], barcode, index);
         fgets(line, MAX, in);
     }
+    sscanf(line, "%s %s %s %s %s %s %s %s", productName, price, ing[0], ing[1], ing[2], ing[3], ing[4], barcode);
+    writeHTML(productName, price, ing[0], ing[1], ing[2], ing[3], ing[4], barcode, index);
     indexEnd(index);
     fclose(in);
 }
 
+//Adds the header information and some of the body to the index.html file
 void indexHeader(FILE *index) {
     fprintf(index, "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\" /><title>WVB Labels</title></head><Body><h1>Labels:</h1><ul>");
 }
