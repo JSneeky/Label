@@ -34,7 +34,7 @@ void comma(char name[], int length) {
 void priceHTML(FILE *HTML, char price[]) {
     int length = strlen(price);
     comma(price, length);
-    fprintf(HTML, "%s</h1><p style=\"font-size: 20px\">", price);
+    fprintf(HTML, "%s</h1><p style=\"font-size: 20px\">Ingredients:</p><p style=\"font-size: 20px\">", price);
 }
 
 //Writes the name of the product to the HTML file
