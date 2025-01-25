@@ -21,8 +21,6 @@ FILE *fopenCheck(char *filename, char *mode) {
     return 0;
 }
 
-//If the ingredient is only a comma then it can be discarded.
-
 //Removes commas from the end of a string
 void comma(char name[], int length) {
     for (int i = 0; i < length; i++) {
@@ -31,8 +29,41 @@ void comma(char name[], int length) {
     }
 }
 
+//Checks is the given ingredient is an allergen
+bool allergen(char ingredient[]) {
+    if (strcmp(ingredient, "Butter,") == 0) return true;
+    else if (strcmp(ingredient, "Sugar,") == 0) return true;
+    else return false;
+}
+
+//Checks if the ingredient field has been left empty
+bool empty(char ingredient[]) {
+    if (strcmp(ingredient, ",") == 0) return true;
+    else return false;
+}
+
+//Writes the ingredients to the HTML document. If the given ingredient is an
+//allergen then it is written in bold and if the field has been left empty
+//then it is not included in teh HTML document.
+void ingHTML(FILE *HTML, char ingredient[]) {
+    bool allergy = allergen(ingredient);
+    bool null = empty(ingredient);
+    if (null == true);
+    else if (allergy == true) {
+        fprintf(HTML, "<b>%s </b>", ingredient);
+    }
+    else fprintf(HTML, "%s ", ingredient);
+}
+
+//Calls the ingHTML function on each ingredient. Then removes the comma on the end
 void ingredients(FILE *HTML, char ing1[], char ing2[], char ing3[], char ing4[], char ing5[]) {
-    
+    ingHTML(HTML, ing1);
+    ingHTML(HTML, ing2);
+    ingHTML(HTML, ing3);
+    ingHTML(HTML, ing4);
+    ingHTML(HTML, ing5);
+    fseek(HTML, -2, SEEK_CUR);
+    fprintf(HTML, " ");
 }
 
 //Writes the price of teh product to the HTML file
