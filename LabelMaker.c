@@ -31,10 +31,10 @@ void comma(char name[], int length) {
 }
 
 //Writes the price of teh product to the HTML file
-void price(FILE *HTML, char price[]) {
+void priceHTML(FILE *HTML, char price[]) {
     int length = strlen(price);
     comma(price, length);
-    fprintf(HTML. "%s</h1><p style=\"font-size: 20px\">");
+    fprintf(HTML, "%s</h1><p style=\"font-size: 20px\">", price);
 }
 
 //Writes the name of the product to the HTML file
@@ -49,7 +49,7 @@ void productHTML(char htmlFile[], char productName[], char price[], char ing1[],
     FILE *product = fopenCheck(htmlFile, "w");
     fprintf(product, "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\" /><title>Flapjack</title><style>div {text-align: center;}</style></head><body><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Libre+Barcode+39+Extended+Text&display=swap\" rel=\"stylesheet\"><div><h1>");
     name(product, productName);
-    price(product, price);
+    priceHTML(product, price);
     fclose(product);
 }
 
