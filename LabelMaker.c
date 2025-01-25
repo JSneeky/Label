@@ -63,7 +63,7 @@ void ingredients(FILE *HTML, char ing1[], char ing2[], char ing3[], char ing4[],
     ingHTML(HTML, ing4);
     ingHTML(HTML, ing5);
     fseek(HTML, -2, SEEK_CUR);
-    fprintf(HTML, " ");
+    fprintf(HTML, "</p><span style=\"font-family: 'Libre Barcode 39 Extended Text'; font-size: 55px;\">");
 }
 
 //Writes the price of teh product to the HTML file
