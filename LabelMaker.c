@@ -21,6 +21,10 @@ FILE *fopenCheck(char *filename, char *mode) {
     return 0;
 }
 
+void barHTML(FILE *HTML, char barcode[]) {
+    fprintf(HTML, "%s</span></div></body></html>", barcode);
+}
+
 //Removes commas from the end of a string
 void comma(char name[], int length) {
     for (int i = 0; i < length; i++) {
@@ -83,10 +87,13 @@ void name(FILE *HTML, char name[]) {
 //Creates the HTML file for each product
 void productHTML(char htmlFile[], char productName[], char price[], char ing1[], char ing2[], char ing3[], char ing4[], char ing5[], char barcode[]) {
     FILE *product = fopenCheck(htmlFile, "w");
-    fprintf(product, "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\" /><title>Flapjack</title><style>div {text-align: center;}</style></head><body><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Libre+Barcode+39+Extended+Text&display=swap\" rel=\"stylesheet\"><div><h1>");
+    fprintf(product, "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\" /><title>%s", productName);
+    fseek(product, -1, SEEK_CUR);
+    fprintf(product, "</title><style>div {text-align: center;}</style></head><body><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Libre+Barcode+39+Extended+Text&display=swap\" rel=\"stylesheet\"><div><h1>");
     name(product, productName);
     priceHTML(product, price);
     ingredients(product, ing1, ing2, ing3, ing4, ing5);
+    barHTML(product, barcode);
     fclose(product);
 }
 
