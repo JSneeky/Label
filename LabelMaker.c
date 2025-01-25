@@ -98,8 +98,7 @@ void productHTML(char htmlFile[], char productName[], char price[], char ing1[],
 }
 
 void indexHTML(FILE *index, char htmlFile[], char productName[]) {
-    fprintf(index, "<li><a href=\"./%s\">%s", htmlFile, productName);
-    fprintf(index, "</a></li>");
+    fprintf(index, "<li><a href=\"./%s\">%s</a></li>", htmlFile, productName);
 }
 
 //Writes the HTML file for a given row of the database
