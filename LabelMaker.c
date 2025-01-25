@@ -97,8 +97,13 @@ void productHTML(char htmlFile[], char productName[], char price[], char ing1[],
     fclose(product);
 }
 
+void indexHTML(FILE *index, char htmlFile[], char productName[]) {
+    fprintf(index, "<li><a href=\"./%s\">%s", htmlFile, productName);
+    fprintf(index, "</a></li>");
+}
+
 //Writes the HTML file for a given row of the database
-void writeHTML(char productName[], char price[], char ing1[], char ing2[], char ing3[], char ing4[], char ing5[], char barcode[]) {
+void writeHTML(char productName[], char price[], char ing1[], char ing2[], char ing3[], char ing4[], char ing5[], char barcode[], FILE *index) {
     int length = strlen(productName);
     char htmlFile[length + 10];
     for (int i = 0; i < length; i++) {
@@ -117,26 +122,39 @@ void writeHTML(char productName[], char price[], char ing1[], char ing2[], char 
     }
     //printf("%s %s", productName, htmlFile);
     productHTML(htmlFile, productName, price, ing1, ing2, ing3, ing4, ing5, barcode);
+    indexHTML(index, htmlFile, productName);
+
+}
+
+void indexEnd(FILE *index) {
+    fprintf(index, "</ul></Body></html>");
 }
 
 //seperates rows into individual variables
-void seperate(FILE *in) {
+void seperate(FILE *in, FILE *index) {
     char line[MAX], productName[MAX2], price[MAXPRICE], ing[ING][MAX2], barcode[BAR];
     fgets(line, MAX, in);
     while (! feof(in)) {
         sscanf(line, "%s %s %s %s %s %s %s %s", productName, price, ing[0], ing[1], ing[2], ing[3], ing[4], barcode);
         //printf("name = %s, price = %s, ing1 = %s, ing2 = %s, ing3 = %s, ing4 = %s, ing5 = %s, bar = %s\n", productName, price, ing[0], ing[1], ing[2], ing[3], ing[4], barcode);
-        writeHTML(productName, price, ing[0], ing[1], ing[2], ing[3], ing[4], barcode);
+        writeHTML(productName, price, ing[0], ing[1], ing[2], ing[3], ing[4], barcode, index);
         fgets(line, MAX, in);
     }
+    indexEnd(index);
     fclose(in);
+}
+
+void indexHeader(FILE *index) {
+    fprintf(index, "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\" /><title>WVB Labels</title></head><Body><h1>Labels:</h1><ul>");
 }
 
 //Opens .csv file and seperates rows into individual arrays each consisting of length 4 
 void processFile(char *filename) {
     FILE *label = fopenCheck(filename, "r");
+    FILE *index = fopenCheck("index.html", "w");
 
-    seperate(label);
+    indexHeader(index);
+    seperate(label, index);
 }
 
 int main(int n, char *args[n]) {
