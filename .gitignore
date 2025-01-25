@@ -1,3 +1,6 @@
+*.txt
+*.html
+
 # Prerequisites
 *.d
 
