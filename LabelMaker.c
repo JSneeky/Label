@@ -102,6 +102,7 @@ void indexHTML(FILE *index, char htmlFile[], char productName[]) {
     fprintf(index, "<li><a href=\"./%s\">%s</a></li>", htmlFile, productName);
 }
 
+//Removes underscores from the prosuct name (Allows products to have multiple words in their names)
 void newName(char productName[], int length) {
     for (int i = 0; i < length; i++) {
         if (productName[i] == '_') productName[i] = ' ';
@@ -135,7 +136,7 @@ void writeHTML(char productName[], char price[], char ing1[], char ing2[], char 
 
 //Closes open tags in index.html
 void indexEnd(FILE *index) {
-    fprintf(index, "</ul></Body></html>");
+    fprintf(index, "</ul><br /><hr width=\"100%%;\" color=\"black\" size=\"2\"></Body></html>");
 }
 
 //seperates rows into individual variables
@@ -156,7 +157,7 @@ void seperate(FILE *in, FILE *index) {
 
 //Adds the header information and some of the body to the index.html file
 void indexHeader(FILE *index) {
-    fprintf(index, "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\" /><title>WVB Labels</title></head><Body><h1>Labels:</h1><ul>");
+    fprintf(index, "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\" /><style>div {text-align: center;} li {display: block;width: 20%%;float: left;}</style><title>WVB Labels</title></head><Body><div><h1>Labels:</h1></div><hr width=\"100%%;\" color=\"black\" size=\"2\"><ul>");
 }
 
 //Opens .csv file and seperates rows into individual arrays each consisting of length 4 
