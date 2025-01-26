@@ -46,10 +46,19 @@ bool empty(char ingredient[]) {
     else return false;
 }
 
+//Removes underscores from the prosuct name (Allows products to have multiple words in their names)
+void underscore(char string[], int length) {
+    for (int i = 0; i < length; i++) {
+        if (string[i] == '_') string[i] = ' ';
+        else;
+    }
+}
+
 //Writes the ingredients to the HTML document. If the given ingredient is an
 //allergen then it is written in bold and if the field has been left empty
 //then it is not included in teh HTML document.
 void ingHTML(FILE *HTML, char ingredient[]) {
+    underscore(ingredient, strlen(ingredient));
     bool allergy = allergen(ingredient);
     bool null = empty(ingredient);
     if (null == true);
@@ -102,19 +111,11 @@ void indexHTML(FILE *index, char htmlFile[], char productName[]) {
     fprintf(index, "<li><a href=\"./%s\">%s</a></li>", htmlFile, productName);
 }
 
-//Removes underscores from the prosuct name (Allows products to have multiple words in their names)
-void newName(char productName[], int length) {
-    for (int i = 0; i < length; i++) {
-        if (productName[i] == '_') productName[i] = ' ';
-        else;
-    }
-}
-
 //Writes the HTML file for a given row of the database
 void writeHTML(char productName[], char price[], char ing1[], char ing2[], char ing3[], char ing4[], char ing5[], char barcode[], FILE *index) {
     int length = strlen(productName);
     char htmlFile[length + 10];
-    newName(productName, length);
+    underscore(productName, length);
     for (int i = 0; i < length; i++) {
         if (productName[i] != ',') {
             htmlFile[i] = productName[i];
