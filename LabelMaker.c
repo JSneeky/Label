@@ -10,6 +10,7 @@
 #define MAX 100
 #define MAX2 50
 #define MAXPRICE 10
+#define COMMA -2
 
 //Checks if the given file is opened successfully
 FILE *fopenCheck(char *filename, char *mode) {
@@ -46,7 +47,7 @@ bool empty(char ingredient[]) {
     else return false;
 }
 
-//Removes underscores from the prosuct name (Allows products to have multiple words in their names)
+//Removes underscores from the name (Allows products and ingredients to have multiple words in their names)
 void underscore(char string[], int length) {
     for (int i = 0; i < length; i++) {
         if (string[i] == '_') string[i] = ' ';
@@ -69,13 +70,13 @@ void ingHTML(FILE *HTML, char ingredient[]) {
 }
 
 //Calls the ingHTML function on each ingredient. Then removes the comma on the end
+//Places ingredients into a 2D array for concisenss
 void ingredients(FILE *HTML, char ing1[], char ing2[], char ing3[], char ing4[], char ing5[]) {
-    ingHTML(HTML, ing1);
-    ingHTML(HTML, ing2);
-    ingHTML(HTML, ing3);
-    ingHTML(HTML, ing4);
-    ingHTML(HTML, ing5);
-    fseek(HTML, -2, SEEK_CUR);
+    char *ingredients[] = {ing1, ing2, ing3, ing4, ing5};
+    for (int i = 0; i < 5; i++) {
+        ingHTML(HTML, ingredients[i]);
+    }
+    fseek(HTML, COMMA, SEEK_CUR);
     fprintf(HTML, "</p><span style=\"font-family: 'Libre Barcode 39 Extended Text'; font-size: 55px;\">");
 }
 
@@ -108,7 +109,7 @@ void productHTML(char htmlFile[], char productName[], char price[], char ing1[],
 
 //Adds product to index.html file
 void indexHTML(FILE *index, char htmlFile[], char productName[]) {
-    fprintf(index, "<li><a href=\"./%s\">%s</a></li>", htmlFile, productName);
+    fprintf(index, "<li><a href=\"./%s\"><button>%s</button></a></li>", htmlFile, productName);
 }
 
 //Writes the HTML file for a given row of the database
@@ -137,7 +138,7 @@ void writeHTML(char productName[], char price[], char ing1[], char ing2[], char 
 
 //Closes open tags in index.html
 void indexEnd(FILE *index) {
-    fprintf(index, "</ul><br /><hr width=\"100%%;\" color=\"black\" size=\"2\"></Body></html>");
+    fprintf(index, "</ul></Body></html>");
 }
 
 //seperates rows into individual variables
@@ -158,7 +159,7 @@ void seperate(FILE *in, FILE *index) {
 
 //Adds the header information and some of the body to the index.html file
 void indexHeader(FILE *index) {
-    fprintf(index, "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\" /><style>div {text-align: center;} li {display: block;width: 20%%;float: left;}</style><title>WVB Labels</title></head><Body><div><h1>Labels:</h1></div><hr width=\"100%%;\" color=\"black\" size=\"2\"><ul>");
+    fprintf(index, "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\" /><style>div {text-align: center;} li {display: block;width: 20%%;float: left;} button {padding:5px 10px; color:#000; border-radius:12px; background-color:#91ab66;}</style><title>WVB Labels</title></head><body><a href=\"https://github.com/JSneeky/Label\"><button style=\"position:10px 10px;\">Github</button></a><div><h1>Labels:</h1></div><hr width=\"100%%;\" color=\"black\" size=\"2\"><ul>");
 }
 
 //Opens .csv file and seperates rows into individual arrays each consisting of length 4 

@@ -58,3 +58,5 @@ Makefile*
 *.html
 *.file
 *.FILE
+*.PNG
+*.png
