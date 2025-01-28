@@ -4,8 +4,7 @@
 #include <string.h>
 
 #define EXIT_CODE 1
-#define PRODUCTS 100
-#define ING 5
+#define ING 10
 #define BAR 13
 #define MAX 100
 #define MAX2 50
@@ -71,8 +70,7 @@ void ingHTML(FILE *HTML, char ingredient[]) {
 
 //Calls the ingHTML function on each ingredient. Then removes the comma on the end
 //Places ingredients into a 2D array for concisenss
-void ingredients(FILE *HTML, char ing1[], char ing2[], char ing3[], char ing4[], char ing5[]) {
-    char *ingredients[] = {ing1, ing2, ing3, ing4, ing5};
+void ingredient(FILE *HTML, char *ingredients[]) {
     for (int i = 0; i < 5; i++) {
         ingHTML(HTML, ingredients[i]);
     }
@@ -95,14 +93,14 @@ void name(FILE *HTML, char name[]) {
 }
 
 //Creates the HTML file for each product
-void productHTML(char htmlFile[], char productName[], char price[], char ing1[], char ing2[], char ing3[], char ing4[], char ing5[], char barcode[]) {
+void productHTML(char htmlFile[], char productName[], char price[], char *ingredients[], char barcode[]) {
     FILE *product = fopenCheck(htmlFile, "w");
     fprintf(product, "<!DOCTYPE html><html lang=\"en\"><head><meta charset=\"utf-8\" /><title>%s", productName);
     fseek(product, -1, SEEK_CUR);
     fprintf(product, "</title><style>div {text-align: center;}</style></head><body><link rel=\"preconnect\" href=\"https://fonts.googleapis.com\"><link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin><link href=\"https://fonts.googleapis.com/css2?family=Libre+Barcode+39+Extended+Text&display=swap\" rel=\"stylesheet\"><div><h1>");
     name(product, productName);
     priceHTML(product, price);
-    ingredients(product, ing1, ing2, ing3, ing4, ing5);
+    ingredient(product, ingredients);
     barHTML(product, barcode);
     fclose(product);
 }
@@ -113,7 +111,7 @@ void indexHTML(FILE *index, char htmlFile[], char productName[]) {
 }
 
 //Writes the HTML file for a given row of the database
-void writeHTML(char productName[], char price[], char ing1[], char ing2[], char ing3[], char ing4[], char ing5[], char barcode[], FILE *index) {
+void writeHTML(char productName[], char price[], char *ingredients[], char barcode[], FILE *index) {
     int length = strlen(productName);
     char htmlFile[length + 10];
     underscore(productName, length);
@@ -132,7 +130,7 @@ void writeHTML(char productName[], char price[], char ing1[], char ing2[], char 
         }
     }
     //printf("%s %s", productName, htmlFile);
-    productHTML(htmlFile, productName, price, ing1, ing2, ing3, ing4, ing5, barcode);
+    productHTML(htmlFile, productName, price, ingredients, barcode);
     indexHTML(index, htmlFile, productName);
 }
 
@@ -146,13 +144,14 @@ void seperate(FILE *in, FILE *index) {
     char line[MAX], productName[MAX2], price[MAXPRICE], ing[ING][MAX2], barcode[BAR];
     fgets(line, MAX, in);
     while (! feof(in)) {
-        sscanf(line, "%s %s %s %s %s %s %s %s", productName, price, ing[0], ing[1], ing[2], ing[3], ing[4], barcode);
-        //printf("name = %s, price = %s, ing1 = %s, ing2 = %s, ing3 = %s, ing4 = %s, ing5 = %s, bar = %s\n", productName, price, ing[0], ing[1], ing[2], ing[3], ing[4], barcode);
-        writeHTML(productName, price, ing[0], ing[1], ing[2], ing[3], ing[4], barcode, index);
+        sscanf(line, "%s %s %s %s %s %s %s %s %s %s %s %s %s", productName, price, ing[0], ing[1], ing[2], ing[3], ing[4], ing[5], ing[6], ing[7], ing[8], ing[9], barcode);
+        char *ingredients[] = {ing[0], ing[1], ing[2], ing[3], ing[4], ing[5], ing[6], ing[7], ing[8], ing[9], ing[10]};
+        writeHTML(productName, price, ingredients, barcode, index);
         fgets(line, MAX, in);
     }
-    sscanf(line, "%s %s %s %s %s %s %s %s", productName, price, ing[0], ing[1], ing[2], ing[3], ing[4], barcode);
-    writeHTML(productName, price, ing[0], ing[1], ing[2], ing[3], ing[4], barcode, index);
+    sscanf(line, "%s %s %s %s %s %s %s %s %s %s %s %s %s", productName, price, ing[0], ing[1], ing[2], ing[3], ing[4], ing[5], ing[6], ing[7], ing[8], ing[9], barcode);
+    char *ingredients[] = {ing[0], ing[1], ing[2], ing[3], ing[4], ing[5], ing[6], ing[7], ing[8], ing[9], ing[10]};
+    writeHTML(productName, price, ingredients, barcode, index);
     indexEnd(index);
     fclose(in);
 }
